@@ -10,16 +10,16 @@ using cAlgo.API.Internals;
 namespace cAlgo.Robots
 {
     /// <summary>
-    /// AegisTrader: Quantitative Multi-Factor Algorithmic Execution System for cTrader / cAlgo.
+    /// goldenAlgo: Quantitative Multi-Factor Algorithmic Execution System for cTrader / cAlgo.
     /// Combines price action microstructure validation, Hull MA trend baseline, Dual Bollinger Band 
     /// volatility expansion, Chaikin Money Flow volume filters, ATR-based risk budgeting, and macroeconomic news filtering.
     /// </summary>
     [Robot(AccessRights = AccessRights.FullAccess, AddIndicators = true)]
-    public class AegisTrader : Robot
+    public class GoldenAlgo : Robot
     {
         #region Parameters
 
-        [Parameter("System Status", Group = "General", DefaultValue = "AegisTrader Active")]
+        [Parameter("System Status", Group = "General", DefaultValue = "goldenAlgo Active")]
         public string StatusMessage { get; set; }
 
         [Parameter("Risk Fraction (of Equity)", Group = "Risk Budgeting", DefaultValue = 0.02, MinValue = 0.001, MaxValue = 1.0)]
@@ -136,7 +136,7 @@ namespace cAlgo.Robots
                 Directory.CreateDirectory(newsFolder);
                 string newsFile = Path.Combine(newsFolder, "calendar-event-list.csv");
                 _newsTimes = LoadNewsTimes(newsFile);
-                Print($"[AegisTrader] Loaded {_newsTimes.Count} macroeconomic calendar events from '{newsFile}'");
+                Print($"[goldenAlgo] Loaded {_newsTimes.Count} macroeconomic calendar events from '{newsFile}'");
             }
 
             // Portfolio tracking
@@ -144,7 +144,7 @@ namespace cAlgo.Robots
             _previousEquity = Account.Equity;
             Positions.Closed += OnPositionClosed;
 
-            Print($"[AegisTrader] Quantitative execution engine initialized. {StatusMessage}");
+            Print($"[goldenAlgo] Quantitative execution engine initialized. {StatusMessage}");
         }
 
         protected override void OnBar()
@@ -288,7 +288,7 @@ namespace cAlgo.Robots
 
             Print("
 =======================================================");
-            Print("           AEGIS-TRADER PERFORMANCE SUMMARY            ");
+            Print("           GOLDENALGO PERFORMANCE SUMMARY              ");
             Print("=======================================================");
             Print($"Total Closed Trades: {totalTrades}");
             Print($"Win Rate:            {winRate:F2}% ({_winningTrades} Wins / {_losingTrades} Losses)");
@@ -442,7 +442,7 @@ namespace cAlgo.Robots
             var times = new List<DateTime>();
             if (!File.Exists(filePath))
             {
-                Print($"[AegisTrader] Macroeconomic calendar file not found at '{filePath}'. Running without calendar blackout.");
+                Print($"[goldenAlgo] Macroeconomic calendar file not found at '{filePath}'. Running without calendar blackout.");
                 return times;
             }
 
@@ -464,7 +464,7 @@ namespace cAlgo.Robots
             }
             catch (Exception ex)
             {
-                Print($"[AegisTrader] Error loading macro calendar: {ex.Message}");
+                Print($"[goldenAlgo] Error loading macro calendar: {ex.Message}");
             }
             return times;
         }

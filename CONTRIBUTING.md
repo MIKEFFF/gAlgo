@@ -1,6 +1,6 @@
-# Contributing to AegisTrader
+# Contributing to goldenAlgo
 
-We welcome research contributions, optimizations, and discussions regarding **AegisTrader**.
+We welcome research contributions, optimizations, and discussions regarding **goldenAlgo**.
 
 ## Development Principles
 - **Algorithmic Rigor**: Maintain mathematical clarity and prevent lookahead / survivorship bias in indicator signals.

@@ -1,11 +1,11 @@
-# AegisTrader: Quantitative Multi-Factor Algorithmic Execution System
+# goldenAlgo: Quantitative Multi-Factor Algorithmic Execution System
 
 [![Platform](https://img.shields.io/badge/Platform-cTrader%20%2F%20cAlgo-blue.svg)](https://spotware.com/)
 [![Language](https://img.shields.io/badge/Language-C%23%20%2F%20.NET-informational.svg)](https://dotnet.microsoft.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Quantitative Strategy](https://img.shields.io/badge/Strategy-Multi--Factor%20Systematic-success.svg)]()
 
-**AegisTrader** is a high-performance, systematic quantitative trading engine engineered in C# for the **cTrader (cAlgo)** institutional trading ecosystem. The architecture implements a multi-stage signal generation pipeline combining price action microstructure analysis, trend baseline filtering, statistical volatility expansion boundaries, volume flow confirmation, dynamic risk budgeting, and real-time macroeconomic event avoidance.
+**goldenAlgo** is a systematic quantitative algorithmic trading engine engineered in C# for the **cTrader (cAlgo)** platform. The architecture implements an automated multi-stage execution pipeline combining price action microstructure analysis, trend baseline filtering, statistical volatility expansion boundaries, volume flow confirmation, dynamic risk budgeting, and real-time macroeconomic event avoidance.
 
 ---
 
@@ -13,8 +13,8 @@
 
 If presenting this project on a resume or portfolio, here is a concise description and set of bullet points:
 
-> **AegisTrader — Quantitative Algorithmic Execution Engine (C# / .NET / cTrader)**
-> - Engineered an automated multi-factor systematic FX trading system in C# utilizing event-driven architecture and asynchronous market data feeds.
+> **goldenAlgo — Quantitative Algorithmic Execution Engine (C# / .NET / cTrader)**
+> - Engineered an automated multi-factor systematic FX trading system in C# utilizing event-driven architecture and real-time market data feeds.
 > - Implemented statistical volatility boundaries (Dual Bollinger Bands) and trend-filtering mechanisms (Hull Moving Average & Chaikin Money Flow) to identify high-probability mean-reversion and momentum setups.
 > - Designed a dynamic risk budgeting module calculating real-time volatility-adjusted position sizing (ATR-normalized) and enforcing temporal drawdown constraints.
 > - Integrated an automated macroeconomic event filter parsing calendar feeds to eliminate high-impact release exposure and mitigate tail risk.
@@ -71,7 +71,7 @@ The execution engine processes incoming ticks through a hierarchical validation 
 
 ## 📊 Performance & Statistical Analytics
 
-Upon robot termination or backtest completion (`OnStop()`), **AegisTrader** compiles a quantitative summary:
+Upon robot termination or backtest completion (`OnStop()`), **goldenAlgo** compiles a quantitative summary:
 
 - **Total Return on Equity (%)**: Net percentage return relative to initial balance.
 - **Profit Factor**: Ratio of gross profits to gross losses.
@@ -88,7 +88,7 @@ Parameters are structured into clean groups within the cTrader Automate panel:
 
 | Group | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **General** | `System Status` | `string` | `"AegisTrader Active"` | Diagnostic status message |
+| **General** | `System Status` | `string` | `"goldenAlgo Active"` | Diagnostic status message |
 | **Risk Budgeting** | `Risk Fraction (of Equity)` | `double` | `0.02` | Risk allocation per trade (e.g. `0.02` = 2% of equity) |
 | **Risk Budgeting** | `TP Multiplier (ATR)` | `double` | `2.0` | ATR multiplier for Take Profit targets |
 | **Risk Budgeting** | `SL Multiplier (ATR)` | `double` | `3.0` | ATR multiplier for Stop Loss targets |
@@ -114,7 +114,7 @@ Parameters are structured into clean groups within the cTrader Automate panel:
 
 ```
 ├── src/
-│   └── AegisTrader.cs                 # Main quantitative execution engine
+│   └── GoldenAlgo.cs                  # Main quantitative execution engine
 ├── data/
 │   └── calendar-event-list.sample.csv # Sample macroeconomic calendar format
 ├── .gitignore                         # Comprehensive C#, .NET & cTrader ignore rules
@@ -134,8 +134,8 @@ Parameters are structured into clean groups within the cTrader Automate panel:
 ### Running in cTrader
 1. Launch **cTrader**.
 2. Open the **Automate** tab.
-3. Click **New cBot** and name it `AegisTrader`.
-4. Replace the template with the contents of [`src/AegisTrader.cs`](src/AegisTrader.cs).
+3. Click **New cBot** and name it `GoldenAlgo`.
+4. Replace the template with the contents of [`src/GoldenAlgo.cs`](src/GoldenAlgo.cs).
 5. Press `Ctrl + B` to build the cBot.
 
 ### Economic Calendar Setup (Optional)
