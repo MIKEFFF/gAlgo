@@ -35,8 +35,8 @@ The robot executes trades through a strict multi-stage confirmation pipeline:
 ```
 
 ### 1. Price Action Recognition (2-Candle Reversal Pattern)
-- **Long (`isPossibleBuy`)**: Identifies a bearish/doji candle followed by a bullish candle whose low touches/exceeds the previous low, with significant lower wicks confirming buying pressure.
-- **Short (`isPossibleSell`)**: Identifies a bullish candle followed by a bearish candle with upper wick rejection confirming selling pressure.
+- **Long Setup**: Identifies a bearish/doji candle followed by a bullish candle whose low tests/exceeds the previous low, with significant lower wicks confirming buying pressure.
+- **Short Setup**: Identifies a bullish candle followed by a bearish candle with upper wick rejection confirming selling pressure.
 
 ### 2. Multi-Indicator Confirmation System
 - **Baseline Filter**: **Hull Moving Average (HMA)** determines the macro trend direction.
@@ -45,9 +45,9 @@ The robot executes trades through a strict multi-stage confirmation pipeline:
 - **Volatility Normalization**: 14-period **Average True Range (ATR)** standardizes Stop Loss, Take Profit, and pattern sizing across different assets.
 
 ### 3. Risk Management & Execution
-- **Dynamic Lot Sizing**: Computes position volume based on fixed account equity risk fraction (`Risk Fraction`, default: `0.15` / 15%) divided by the ATR stop distance in pips.
+- **Dynamic Lot Sizing**: Computes position volume based on fixed account equity risk fraction (`Risk Fraction`, default: `0.02` / 2%) divided by the ATR stop distance in pips.
 - **Trade Duration Limits**: Automatically closes stagnant trades if they exceed a configured time threshold (`TradeLengthLimitHours`).
-- **Trading Hours Filter**: Restricts execution to active market sessions (`01:00` - `23:00` server time).
+- **Trading Hours Filter**: Restricts execution to active market sessions (`StartHour` - `EndHour` server time).
 - **Economic News Calendar Filter**: Skips entries or adjusts volatility thresholds around high-impact economic calendar releases (`calendar-event-list.csv`).
 
 ---
@@ -58,7 +58,7 @@ Upon stopping or backtest completion (`OnStop()`), **NNFXBOT** automatically ana
 
 - **Total Returns (%)**: Net percentage return relative to initial balance.
 - **Profit Factor**: Gross profits divided by gross losses.
-- **Sharpe Ratio**: Annualized return-to-volatility ratio ($R_f$ adjusted).
+- **Sharpe Ratio**: Annualized return-to-volatility ratio.
 - **Martin Ratio (Ulcer Performance Index)**: Annualized return relative to maximum drawdown.
 - **Maximum Drawdown**: Peak equity drawdown recorded in account currency.
 - **Win Rate (%)**: Percentage of winning vs losing trades.
@@ -67,33 +67,38 @@ Upon stopping or backtest completion (`OnStop()`), **NNFXBOT** automatically ana
 
 ## Strategy Parameters
 
-All parameters can be tuned directly inside the cTrader Automate UI:
+Parameters are grouped for convenient tuning inside the cTrader Automate UI:
 
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `Status Message` | `string` | `"NNFX Bot Active"` | Diagnostic message output in cTrader logs |
-| `Buffer Minutes` | `int` | `30` | News blackout buffer window in minutes |
-| `Risk Fraction` | `double` | `0.15` | Risk fraction of equity per trade |
-| `TP Multiplier` | `double` | `2.0` | ATR multiplier for Take Profit targets |
-| `SL Multiplier` | `double` | `3.0` | ATR multiplier for Stop Loss targets |
-| `Long SL Pips` | `double` | `2.0` | Multiplier for Long Bollinger trade Stop Loss |
-| `Short SL Pips` | `double` | `2.0` | Multiplier for Short Bollinger trade Stop Loss |
-| `HmaPeriod` | `int` | `50` | Hull Moving Average baseline period |
-| `ChaikinPeriod` | `int` | `19` | Chaikin Money Flow period |
-| `TradeLengthLimitHours` | `int` | `3` | Maximum hours to hold an unmodified trade |
-| `TradeLengthLimitMinutes` | `int` | `0` | Additional minutes for trade lifetime limit |
-| `BbPeriodsLong` | `int` | `21` | Period for Long Bollinger Bands |
-| `BbPeriodsShort` | `int` | `15` | Period for Short Bollinger Bands |
-| `StdDevsLong` | `double` | `1.8` | Standard deviation multiplier for Long BB |
-| `StdDevsShort` | `double` | `1.9` | Standard deviation multiplier for Short BB |
+| Group | Parameter | Type | Default | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **General** | `Status Message` | `string` | `"NNFX Bot Active"` | Diagnostic message in cTrader logs |
+| **Risk Management** | `Risk Fraction (of Equity)` | `double` | `0.02` | Risk fraction of equity per trade (e.g. 0.02 = 2%) |
+| **Risk Management** | `TP Multiplier (ATR)` | `double` | `2.0` | ATR multiplier for Take Profit targets |
+| **Risk Management** | `SL Multiplier (ATR)` | `double` | `3.0` | ATR multiplier for Stop Loss targets |
+| **Risk Management** | `Long BB SL Multiplier` | `double` | `2.0` | ATR multiplier for Long Bollinger trade SL |
+| **Risk Management** | `Short BB SL Multiplier` | `double` | `2.0` | ATR multiplier for Short Bollinger trade SL |
+| **Indicators** | `ATR Period` | `int` | `14` | Exponential Average True Range period |
+| **Indicators** | `HMA Baseline Period` | `int` | `50` | Hull Moving Average baseline period |
+| **Indicators** | `Chaikin Period` | `int` | `19` | Chaikin Money Flow volume period |
+| **Bollinger Bands** | `Long BB Period` | `int` | `21` | Period for Long Bollinger Bands |
+| **Bollinger Bands** | `Long BB StdDev` | `double` | `1.8` | Standard deviation multiplier for Long BB |
+| **Bollinger Bands** | `Short BB Period` | `int` | `15` | Period for Short Bollinger Bands |
+| **Bollinger Bands** | `Short BB StdDev` | `double` | `1.9` | Standard deviation multiplier for Short BB |
+| **Trading Hours** | `Start Hour (UTC/Server)` | `int` | `1` | Daily trading session start hour |
+| **Trading Hours** | `End Hour (UTC/Server)` | `int` | `23` | Daily trading session end hour |
+| **Trade Execution** | `Trade Max Lifetime (Hours)` | `int` | `3` | Maximum hours to hold an unmodified trade |
+| **Trade Execution** | `Trade Max Lifetime (Minutes)` | `int` | `0` | Additional minutes for trade lifetime limit |
+| **News Filter** | `News Buffer (Minutes)` | `int` | `30` | News blackout buffer before and after event |
+| **News Filter** | `Enable News Filter` | `bool` | `true` | Toggle news calendar filtering on/off |
 
 ---
 
 ## Project Structure
 
 ```
+trading-algorithm/
 ├── src/
-│   └── NNFXBOT.cs                    # Main cTrader Robot (cBot) source code
+│   └── NNFXBOT.cs                    # Clean cTrader Robot (cBot) source code
 ├── data/
 │   └── calendar-event-list.sample.csv # Example economic news calendar format
 ├── .gitignore                        # C# / .NET / cTrader git ignore definitions
@@ -122,7 +127,7 @@ To enable the high-impact news filter:
 1. Export or download your economic calendar CSV (e.g. from ForexFactory, DailyFX, or Investing.com).
 2. Place the CSV file at:
    - **Windows**: `%AppData%\cAlgo\excel\calendar-event-list.csv`
-   - Refer to [`data/calendar-event-list.sample.csv`](data/calendar-event-list.sample.csv) for expected date formats (`MM/dd/yyyy HH:mm:ss`).
+   - Refer to [`data/calendar-event-list.sample.csv`](data/calendar-event-list.sample.csv) for expected date formats (`MM/dd/yyyy HH:mm:ss` or standard ISO formats).
 
 ---
 
