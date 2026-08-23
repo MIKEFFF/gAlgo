@@ -1,15 +1,12 @@
-# Contributing to NNFXBOT
+# Contributing to AegisTrader
 
-Thank you for your interest in contributing to the **NNFXBOT** cTrader automated trading strategy!
+We welcome research contributions, optimizations, and discussions regarding **AegisTrader**.
 
-## Guidelines
+## Development Principles
+- **Algorithmic Rigor**: Maintain mathematical clarity and prevent lookahead / survivorship bias in indicator signals.
+- **Performance & Efficiency**: Ensure all per-tick routines remain performant and avoid unnecessary allocations.
+- **Risk Integrity**: Protect capital preservation logic and boundary constraints.
 
-1. **Bug Reports & Issues**: If you encounter issues, please open an Issue describing the bug, symbol/timeframe, market conditions, and relevant log outputs.
-2. **Feature Requests & Strategy Enhancements**: Please open a discussion or issue before submitting substantial architectural or algorithmic modifications.
-3. **Pull Requests**:
-   - Keep commits modular and descriptive.
-   - Test your changes using cTrader backtesting across diverse market conditions.
-   - Maintain C# naming conventions and clean code structure.
-
-## Disclaimer
-Trading forex and derivatives involves significant risk of capital loss. Contributions are for educational and research purposes.
+## Testing
+- Conduct backtests using tick-level historical data across diverse market regimes (trending, mean-reverting, high-volatility).
+- Validate metrics (Sharpe, Ulcer Index, Drawdown) across sample and out-of-sample periods.

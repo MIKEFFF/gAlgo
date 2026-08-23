@@ -1,153 +1,159 @@
-# NNFXBOT: cTrader Algorithmic Trading Strategy
+# AegisTrader: Quantitative Multi-Factor Algorithmic Execution System
 
 [![Platform](https://img.shields.io/badge/Platform-cTrader%20%2F%20cAlgo-blue.svg)](https://spotware.com/)
 [![Language](https://img.shields.io/badge/Language-C%23%20%2F%20.NET-informational.svg)](https://dotnet.microsoft.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Quantitative Strategy](https://img.shields.io/badge/Strategy-Multi--Factor%20Systematic-success.svg)]()
 
-**NNFXBOT** is an automated algorithmic trading robot (cBot) designed for **cTrader / cAlgo** (C#). Inspired by the **No Nonsense Forex (NNFX)** framework, the algorithm combines price action candle analysis, multi-layered technical indicator confirmation, volatility-adjusted position sizing, news event avoidance, and automated performance analytics.
+**AegisTrader** is a high-performance, systematic quantitative trading engine engineered in C# for the **cTrader (cAlgo)** institutional trading ecosystem. The architecture implements a multi-stage signal generation pipeline combining price action microstructure analysis, trend baseline filtering, statistical volatility expansion boundaries, volume flow confirmation, dynamic risk budgeting, and real-time macroeconomic event avoidance.
 
 ---
 
-## Architecture & Strategy Overview
+## 💼 CV / Resume Highlights
 
-The robot executes trades through a strict multi-stage confirmation pipeline:
+If presenting this project on a resume or portfolio, here is a concise description and set of bullet points:
+
+> **AegisTrader — Quantitative Algorithmic Execution Engine (C# / .NET / cTrader)**
+> - Engineered an automated multi-factor systematic FX trading system in C# utilizing event-driven architecture and asynchronous market data feeds.
+> - Implemented statistical volatility boundaries (Dual Bollinger Bands) and trend-filtering mechanisms (Hull Moving Average & Chaikin Money Flow) to identify high-probability mean-reversion and momentum setups.
+> - Designed a dynamic risk budgeting module calculating real-time volatility-adjusted position sizing (ATR-normalized) and enforcing temporal drawdown constraints.
+> - Integrated an automated macroeconomic event filter parsing calendar feeds to eliminate high-impact release exposure and mitigate tail risk.
+> - Built a real-time post-trade performance analytics module computing Sharpe ratio, Ulcer/Martin index, maximum equity drawdown, and profit factors on termination.
+
+---
+
+## 🏛 System Architecture & Signal Pipeline
+
+The execution engine processes incoming ticks through a hierarchical validation pipeline:
 
 ```
-                  ┌──────────────────────────────┐
-                  │          New Tick            │
-                  └──────────────┬───────────────┘
-                                 │
-                 [ Trading Hours & News Check ]
-                                 │
-             ┌───────────────────┴───────────────────┐
-             ▼                                       ▼
-    [ BUY Setup Check ]                     [ SELL Setup Check ]
-  • 2-Candle Price Action Pattern         • 2-Candle Price Action Pattern
-  • Bollinger Band Expansion & Bounds     • Bollinger Band Expansion & Bounds
-  • Trigger Price Confirmation            • HMA Baseline + Chaikin Money Flow
-             │                                       │
-             └───────────────────┬───────────────────┘
-                                 ▼
-                     [ Dynamic Risk Sizing ]
-                  ATR-Based Stop Loss & Sizing
-                                 ▼
-                    [ Market Order Execution ]
+                  ┌─────────────────────────────────────┐
+                  │       Real-Time Market Tick         │
+                  └──────────────────┬──────────────────┘
+                                     │
+                    [ Session & Macro Event Filters ]
+                                     │
+             ┌───────────────────────┴───────────────────────┐
+             ▼                                               ▼
+    [ BUY Factor Pipeline ]                         [ SELL Factor Pipeline ]
+  • Microstructure Wick Reversal                  • Microstructure Wick Reversal
+  • Statistical Band Expansion (BB)               • Statistical Band Expansion (BB)
+  • Dynamic Trigger Validation                    • Trend Baseline (HMA) + Volume (CMF)
+             │                                               │
+             └───────────────────────┬───────────────────────┘
+                                     ▼
+                     [ Dynamic Risk Budgeting Engine ]
+                       ATR-Adjusted Position Sizing
+                                     ▼
+                      [ Normalized Order Execution ]
 ```
 
-### 1. Price Action Recognition (2-Candle Reversal Pattern)
-- **Long Setup**: Identifies a bearish/doji candle followed by a bullish candle whose low tests/exceeds the previous low, with significant lower wicks confirming buying pressure.
-- **Short Setup**: Identifies a bullish candle followed by a bearish candle with upper wick rejection confirming selling pressure.
+---
 
-### 2. Multi-Indicator Confirmation System
-- **Baseline Filter**: **Hull Moving Average (HMA)** determines the macro trend direction.
-- **Volatility & Expansion Filter**: **Dual Bollinger Bands** (Long & Short configurations) verify volatility expansion (`Bandwidth(t) > Bandwidth(t-2)`) and ensure price has room for mean reversion.
-- **Volume Filter**: **Chaikin Money Flow (CMF)** confirms institutional volume direction.
-- **Volatility Normalization**: 14-period **Average True Range (ATR)** standardizes Stop Loss, Take Profit, and pattern sizing across different assets.
+## 🔬 Quantitative Signal Architecture
 
-### 3. Risk Management & Execution
-- **Dynamic Lot Sizing**: Computes position volume based on fixed account equity risk fraction (`Risk Fraction`, default: `0.02` / 2%) divided by the ATR stop distance in pips.
-- **Trade Duration Limits**: Automatically closes stagnant trades if they exceed a configured time threshold (`TradeLengthLimitHours`).
-- **Trading Hours Filter**: Restricts execution to active market sessions (`StartHour` - `EndHour` server time).
-- **Economic News Calendar Filter**: Skips entries or adjusts volatility thresholds around high-impact economic calendar releases (`calendar-event-list.csv`).
+### 1. Price Action Microstructure Reversal
+- **Long Formation**: Identifies bearish exhaustion followed by bullish absorption with significant lower wick extension relative to prevailing volatility (`Symbol.PipSize`).
+- **Short Formation**: Identifies bullish exhaustion followed by bearish rejection with upper wick extension confirming selling pressure.
+
+### 2. Multi-Factor Confirmation Matrix
+- **Trend Baseline Factor**: 50-period **Hull Moving Average (HMA)** establishes macro regime bias with reduced lag.
+- **Statistical Dispersion & Expansion**: **Dual Bollinger Bands** evaluate volatility expansion (`Bandwidth(t) > Bandwidth(t-2)`) and ensure price has room for mean-reversion without entering saturated extremes.
+- **Volume Flow Factor**: **Chaikin Money Flow (CMF)** measures institutional accumulation/distribution pressure.
+- **Volatility Parity & Normalization**: 14-period **Average True Range (ATR)** standardizes dynamic stop distances and profit targets across various currency pairs.
+
+### 3. Risk Budgeting & Capital Protection
+- **Volatility-Parity Position Sizing**: Automatically sizes order volume as a fixed percentage of total equity (`RiskFraction`) divided by the ATR-derived stop distance.
+- **Temporal Lifetime Limits**: Forces liquidation of dormant or stagnant positions exceeding maximum holding duration (`TradeLengthLimitHours`).
+- **Macroeconomic Event Filter**: Parses economic calendar feeds (`calendar-event-list.csv`) to enforce trading blackouts around major central bank rate decisions, CPI releases, and NFP prints.
 
 ---
 
-## Performance & Statistical Analytics
+## 📊 Performance & Statistical Analytics
 
-Upon stopping or backtest completion (`OnStop()`), **NNFXBOT** automatically analyzes closed trades and logs a performance report:
+Upon robot termination or backtest completion (`OnStop()`), **AegisTrader** compiles a quantitative summary:
 
-- **Total Returns (%)**: Net percentage return relative to initial balance.
-- **Profit Factor**: Gross profits divided by gross losses.
-- **Sharpe Ratio**: Annualized return-to-volatility ratio.
-- **Martin Ratio (Ulcer Performance Index)**: Annualized return relative to maximum drawdown.
-- **Maximum Drawdown**: Peak equity drawdown recorded in account currency.
-- **Win Rate (%)**: Percentage of winning vs losing trades.
+- **Total Return on Equity (%)**: Net percentage return relative to initial balance.
+- **Profit Factor**: Ratio of gross profits to gross losses.
+- **Annualized Sharpe Ratio**: Risk-adjusted excess return normalized by standard deviation of returns.
+- **Martin (Ulcer Performance) Ratio**: Risk metric measuring return relative to depth and duration of drawdowns.
+- **Maximum Drawdown**: Maximum peak-to-trough equity decline recorded during execution.
+- **Win Rate (%)**: Proportion of profitable vs unprofitable closed trades.
 
 ---
 
-## Strategy Parameters
+## ⚙️ Parameters & Configuration
 
-Parameters are grouped for convenient tuning inside the cTrader Automate UI:
+Parameters are structured into clean groups within the cTrader Automate panel:
 
 | Group | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **General** | `Status Message` | `string` | `"NNFX Bot Active"` | Diagnostic message in cTrader logs |
-| **Risk Management** | `Risk Fraction (of Equity)` | `double` | `0.02` | Risk fraction of equity per trade (e.g. 0.02 = 2%) |
-| **Risk Management** | `TP Multiplier (ATR)` | `double` | `2.0` | ATR multiplier for Take Profit targets |
-| **Risk Management** | `SL Multiplier (ATR)` | `double` | `3.0` | ATR multiplier for Stop Loss targets |
-| **Risk Management** | `Long BB SL Multiplier` | `double` | `2.0` | ATR multiplier for Long Bollinger trade SL |
-| **Risk Management** | `Short BB SL Multiplier` | `double` | `2.0` | ATR multiplier for Short Bollinger trade SL |
-| **Indicators** | `ATR Period` | `int` | `14` | Exponential Average True Range period |
-| **Indicators** | `HMA Baseline Period` | `int` | `50` | Hull Moving Average baseline period |
-| **Indicators** | `Chaikin Period` | `int` | `19` | Chaikin Money Flow volume period |
-| **Bollinger Bands** | `Long BB Period` | `int` | `21` | Period for Long Bollinger Bands |
-| **Bollinger Bands** | `Long BB StdDev` | `double` | `1.8` | Standard deviation multiplier for Long BB |
-| **Bollinger Bands** | `Short BB Period` | `int` | `15` | Period for Short Bollinger Bands |
-| **Bollinger Bands** | `Short BB StdDev` | `double` | `1.9` | Standard deviation multiplier for Short BB |
-| **Trading Hours** | `Start Hour (UTC/Server)` | `int` | `1` | Daily trading session start hour |
-| **Trading Hours** | `End Hour (UTC/Server)` | `int` | `23` | Daily trading session end hour |
-| **Trade Execution** | `Trade Max Lifetime (Hours)` | `int` | `3` | Maximum hours to hold an unmodified trade |
-| **Trade Execution** | `Trade Max Lifetime (Minutes)` | `int` | `0` | Additional minutes for trade lifetime limit |
-| **News Filter** | `News Buffer (Minutes)` | `int` | `30` | News blackout buffer before and after event |
-| **News Filter** | `Enable News Filter` | `bool` | `true` | Toggle news calendar filtering on/off |
+| **General** | `System Status` | `string` | `"AegisTrader Active"` | Diagnostic status message |
+| **Risk Budgeting** | `Risk Fraction (of Equity)` | `double` | `0.02` | Risk allocation per trade (e.g. `0.02` = 2% of equity) |
+| **Risk Budgeting** | `TP Multiplier (ATR)` | `double` | `2.0` | ATR multiplier for Take Profit targets |
+| **Risk Budgeting** | `SL Multiplier (ATR)` | `double` | `3.0` | ATR multiplier for Stop Loss targets |
+| **Risk Budgeting** | `Long BB SL Multiplier` | `double` | `2.0` | Stop loss multiplier for Long Bollinger trades |
+| **Risk Budgeting** | `Short BB SL Multiplier` | `double` | `2.0` | Stop loss multiplier for Short Bollinger trades |
+| **Technical Factors**| `ATR Period` | `int` | `14` | Exponential Average True Range lookback |
+| **Technical Factors**| `HMA Baseline Period` | `int` | `50` | Hull Moving Average baseline period |
+| **Technical Factors**| `Chaikin Volume Period` | `int` | `19` | Chaikin Money Flow volume lookback |
+| **Statistical Bands**| `Long BB Period` | `int` | `21` | Period for Long statistical bands |
+| **Statistical Bands**| `Long BB StdDev` | `double` | `1.8` | Standard deviation multiplier (Long) |
+| **Statistical Bands**| `Short BB Period` | `int` | `15` | Period for Short statistical bands |
+| **Statistical Bands**| `Short BB StdDev` | `double` | `1.9` | Standard deviation multiplier (Short) |
+| **Execution Windows**| `Session Start Hour (UTC)` | `int` | `1` | Session start hour |
+| **Execution Windows**| `Session End Hour (UTC)` | `int` | `23` | Session end hour |
+| **Execution Windows**| `Max Holding Period (Hours)`| `int` | `3` | Maximum position lifetime in hours |
+| **Execution Windows**| `Max Holding Period (Mins)` | `int` | `0` | Additional position lifetime in minutes |
+| **Macro Event Filter**| `News Blackout Window (Mins)`| `int` | `30` | Blackout duration before and after macro events |
+| **Macro Event Filter**| `Enable News Event Filter` | `bool` | `true` | Toggle calendar event blackout |
 
 ---
 
-## Project Structure
+## 📁 Repository Structure
 
 ```
-trading-algorithm/
 ├── src/
-│   └── NNFXBOT.cs                    # Clean cTrader Robot (cBot) source code
+│   └── AegisTrader.cs                 # Main quantitative execution engine
 ├── data/
-│   └── calendar-event-list.sample.csv # Example economic news calendar format
-├── .gitignore                        # C# / .NET / cTrader git ignore definitions
-├── CONTRIBUTING.md                   # Contribution and testing guidelines
-├── LICENSE                           # MIT License
-└── README.md                         # Project documentation
+│   └── calendar-event-list.sample.csv # Sample macroeconomic calendar format
+├── .gitignore                         # Comprehensive C#, .NET & cTrader ignore rules
+├── CONTRIBUTING.md                    # Research and contribution guidelines
+├── LICENSE                            # Open-source MIT License
+└── README.md                          # Technical documentation and CV overview
 ```
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
-### Prerequisites
-- **[cTrader Desktop](https://spotware.com/)** (Windows) or compatible cTrader Automate environment.
-- **.NET 6.0 / .NET Framework** (managed automatically by cTrader).
+### Requirements
+- **cTrader Desktop** (Windows) or compatible cTrader Automate CLI.
+- **.NET SDK** (managed automatically by cTrader).
 
-### Installation in cTrader
-1. Open **cTrader**.
-2. Navigate to the **Automate** tab (robot icon on the left sidebar).
-3. Click **New cBot** and name it `NNFXBOT`.
-4. Copy and paste the contents of [`src/NNFXBOT.cs`](src/NNFXBOT.cs) into the cTrader code editor.
-5. Click **Build** (`Ctrl + B` or the hammer icon).
+### Running in cTrader
+1. Launch **cTrader**.
+2. Open the **Automate** tab.
+3. Click **New cBot** and name it `AegisTrader`.
+4. Replace the template with the contents of [`src/AegisTrader.cs`](src/AegisTrader.cs).
+5. Press `Ctrl + B` to build the cBot.
 
-### News Calendar Setup (Optional)
-To enable the high-impact news filter:
-1. Export or download your economic calendar CSV (e.g. from ForexFactory, DailyFX, or Investing.com).
-2. Place the CSV file at:
-   - **Windows**: `%AppData%\cAlgo\excel\calendar-event-list.csv`
-   - Refer to [`data/calendar-event-list.sample.csv`](data/calendar-event-list.sample.csv) for expected date formats (`MM/dd/yyyy HH:mm:ss` or standard ISO formats).
-
----
-
-## Backtesting & Optimization
-
-1. In cTrader Automate, select `NNFXBOT`.
-2. Add an instance to your target symbol (e.g. `EURUSD`, `GBPUSD`) and desired timeframe (e.g., `h1` or `m15`).
-3. Set your backtest period, tick data quality (**Tick Data from Server (accurate)** recommended), and initial balance.
-4. Click **Backtesting** to run historical simulations and review the **Strategy Performance Report** in the output log.
+### Economic Calendar Setup (Optional)
+To enable macroeconomic event filtering:
+1. Export high-impact economic news releases as a CSV.
+2. Save the file to `%AppData%\cAlgo\excel\calendar-event-list.csv`.
+3. Refer to [`data/calendar-event-list.sample.csv`](data/calendar-event-list.sample.csv) for column formatting.
 
 ---
 
-## Disclaimer
+## ⚠️ Disclaimer
 
 > [!WARNING]
-> **Trading Foreign Exchange (Forex) and Contracts for Difference (CFDs) carries a high level of risk to your capital.** 
-> This software is provided for educational, research, and development purposes only. Past backtest performance is no guarantee of future results. Always thoroughly test any trading algorithm on a demo account before risking real funds.
+> **Trading financial instruments and leveraged foreign exchange carries substantial risk of capital loss.**
+> This project is designed for quantitative research, backtesting, and educational demonstration. Past performance in backtesting is not indicative of future market results.
 
 ---
 
-## License
+## 📜 License
 
-This project is open-source and licensed under the [MIT License](LICENSE).
+This project is open-source under the [MIT License](LICENSE).
