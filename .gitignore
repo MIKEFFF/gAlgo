@@ -1,0 +1,28 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+*.algo
+*.algo.zip
+
+# Visual Studio & VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+Thumbs.db
+*.tmp
+
+# cTrader / cAlgo user specific
+*.cAlgoUserData
+*.cAlgoSettings
+
+# Local runtime data / sensitive files
+calendar-event-list.csv
+*.local.csv
