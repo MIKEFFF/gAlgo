@@ -9,19 +9,6 @@
 
 ---
 
-## 💼 CV / Resume Highlights
-
-If presenting this project on a resume or portfolio, here is a concise description and set of bullet points:
-
-> **goldenAlgo — Quantitative Algorithmic Execution Engine (C# / .NET / cTrader)**
-> - Engineered an automated multi-factor systematic FX trading system in C# utilizing event-driven architecture and real-time market data feeds.
-> - Implemented statistical volatility boundaries (Dual Bollinger Bands) and trend-filtering mechanisms (Hull Moving Average & Chaikin Money Flow) to identify high-probability mean-reversion and momentum setups.
-> - Designed a dynamic risk budgeting module calculating real-time volatility-adjusted position sizing (ATR-normalized) and enforcing temporal drawdown constraints.
-> - Integrated an automated macroeconomic event filter parsing calendar feeds to eliminate high-impact release exposure and mitigate tail risk.
-> - Built a real-time post-trade performance analytics module computing Sharpe ratio, Ulcer/Martin index, maximum equity drawdown, and profit factors on termination.
-
----
-
 ## 🏛 System Architecture & Signal Pipeline
 
 The execution engine processes incoming ticks through a hierarchical validation pipeline:
