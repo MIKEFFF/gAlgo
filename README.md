@@ -1,7 +1,7 @@
 # goldenAlgo: Quantitative Multi-Factor Algorithmic Execution System
 
 [![Platform](https://img.shields.io/badge/Platform-cTrader%20%2F%20cAlgo-blue.svg)](https://spotware.com/)
-[![Language](https://img.shields.io/badge/Language-C%23%20%2F%20.NET-informational.svg)](https://dotnet.microsoft.com/)
+[![Language](https://img.shields.io/badge/Language-C%23-informational.svg)](https://learn.microsoft.com/csharp/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Quantitative Strategy](https://img.shields.io/badge/Strategy-Multi--Factor%20Systematic-success.svg)]()
 
@@ -69,6 +69,29 @@ Upon robot termination or backtest completion (`OnStop()`), **goldenAlgo** compi
 
 ---
 
+## 💡 Research Reflection: Backtesting & Overfitting Analysis
+
+A central phase of developing **goldenAlgo** involved extensive historical simulation using **5 years worth of tick and bar data**. While initial testing yielded compelling results, subsequent evaluation provided essential insights into the realities and pitfalls of quantitative strategy development:
+
+### 1. In-Sample Optimization & High Expectations
+During the initial backtesting phase spanning 5 years of historical market data, the multi-factor model produced strong in-sample equity curves, high win rates, and attractive Sharpe ratios. The confluence of HMA trend baseline, dual Bollinger statistical boundaries, and price-action wick confirmations appeared to effectively capture recurring market patterns.
+
+### 2. The Overfitting (Curve-Fitting) Trap
+Through continuous optimization—fine-tuning indicator lookbacks (HMA periods, Chaikin parameters, Bollinger standard deviations) and adjusting trade lifetime rules—the strategy inadvertently fell into **overfitting**. Rather than identifying a universal, persistent structural market inefficiency, the parameters were calibrated too specifically to the unique market regimes, noise, and volatility structures of that 5-year sample.
+
+### 3. Out-of-Sample Performance Degradation
+When subsequently subjected to rigorous **out-of-sample data** (unseen market periods and differing macroeconomic regimes), the strategy did not perform well:
+- Signal reliability deteriorated significantly, leading to false breakouts and premature exits.
+- Drawdowns exceeded historical in-sample limits, while the profit factor compressed toward breakeven.
+- The tightly fitted rules proved too fragile to adapt to structural regime shifts and varying volatility environments.
+
+### 4. Key Takeaways & Quantitative Takeaways
+- **The Danger of Over-Parameterization**: Adding numerous indicators and confirmation filters creates excessive degrees of freedom, making it easy to fit noise rather than true market signal.
+- **Importance of Walk-Forward Validation**: In-sample backtesting alone is insufficient. Rigorous out-of-sample validation, walk-forward analysis, and Monte Carlo stress testing are mandatory before assessing real-world viability.
+- **Primacy of Robustness Over Optimization**: A simpler model with fewer tunable parameters is far more likely to generalize across market cycles than a heavily optimized multi-layered rule set.
+
+---
+
 ## ⚙️ Parameters & Configuration
 
 Parameters are structured into clean groups within the cTrader Automate panel:
@@ -104,10 +127,10 @@ Parameters are structured into clean groups within the cTrader Automate panel:
 │   └── GoldenAlgo.cs                  # Main quantitative execution engine
 ├── data/
 │   └── calendar-event-list.sample.csv # Sample macroeconomic calendar format
-├── .gitignore                         # Comprehensive C#, .NET & cTrader ignore rules
+├── .gitignore                         # Comprehensive C# & cTrader ignore rules
 ├── CONTRIBUTING.md                    # Research and contribution guidelines
 ├── LICENSE                            # Open-source MIT License
-└── README.md                          # Technical documentation and CV overview
+└── README.md                          # Technical documentation
 ```
 
 ---
@@ -116,7 +139,7 @@ Parameters are structured into clean groups within the cTrader Automate panel:
 
 ### Requirements
 - **cTrader Desktop** (Windows) or compatible cTrader Automate CLI.
-- **.NET SDK** (managed automatically by cTrader).
+- **C# Build Environment** (managed automatically by cTrader).
 
 ### Running in cTrader
 1. Launch **cTrader**.
