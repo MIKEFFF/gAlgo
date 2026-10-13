@@ -1,11 +1,11 @@
-# goldenAlgo: Quantitative Multi-Factor Algorithmic Execution System
+# gAlgo: Quantitative Multi-Factor Algorithmic Execution System
 
 [![Platform](https://img.shields.io/badge/Platform-cTrader%20%2F%20cAlgo-blue.svg)](https://spotware.com/)
 [![Language](https://img.shields.io/badge/Language-C%23-informational.svg)](https://learn.microsoft.com/csharp/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Quantitative Strategy](https://img.shields.io/badge/Strategy-Multi--Factor%20Systematic-success.svg)]()
 
-**goldenAlgo** is a systematic quantitative algorithmic trading engine engineered in C# for the **cTrader (cAlgo)** platform. The architecture implements an automated multi-stage execution pipeline combining price action microstructure analysis, trend baseline filtering, statistical volatility expansion boundaries, volume flow confirmation, dynamic risk budgeting, and real-time macroeconomic event avoidance.
+**gAlgo** is a systematic quantitative algorithmic trading engine engineered in C# for the **cTrader (cAlgo)** platform. The architecture implements an automated multi-stage execution pipeline combining price action microstructure analysis, trend baseline filtering, statistical volatility expansion boundaries, volume flow confirmation, dynamic risk budgeting, and real-time macroeconomic event avoidance.
 
 ---
 
@@ -58,7 +58,7 @@ The execution engine processes incoming ticks through a hierarchical validation 
 
 ## 📊 Performance & Statistical Analytics
 
-Upon robot termination or backtest completion (`OnStop()`), **goldenAlgo** compiles a quantitative summary:
+Upon robot termination or backtest completion (`OnStop()`), **gAlgo** compiles a quantitative summary:
 
 - **Total Return on Equity (%)**: Net percentage return relative to initial balance.
 - **Profit Factor**: Ratio of gross profits to gross losses.
@@ -71,7 +71,7 @@ Upon robot termination or backtest completion (`OnStop()`), **goldenAlgo** compi
 
 ## 💡 Research Reflection: Backtesting & Overfitting Analysis
 
-A central phase of developing **goldenAlgo** involved extensive historical simulation using **5 years worth of tick and bar data**. While initial testing yielded compelling results, subsequent evaluation provided essential insights into the realities and pitfalls of quantitative strategy development:
+A central phase of developing **gAlgo** involved extensive historical simulation using **5 years worth of tick and bar data**. While initial testing yielded compelling results, subsequent evaluation provided essential insights into the realities and pitfalls of quantitative strategy development:
 
 ### 1. In-Sample Optimization & High Expectations
 During the initial backtesting phase spanning 5 years of historical market data, the multi-factor model produced strong in-sample equity curves, high win rates, and attractive Sharpe ratios. The confluence of HMA trend baseline, dual Bollinger statistical boundaries, and price-action wick confirmations appeared to effectively capture recurring market patterns.
@@ -98,7 +98,7 @@ Parameters are structured into clean groups within the cTrader Automate panel:
 
 | Group | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **General** | `System Status` | `string` | `"goldenAlgo Active"` | Diagnostic status message |
+| **General** | `System Status` | `string` | `"gAlgo Active"` | Diagnostic status message |
 | **Risk Budgeting** | `Risk Fraction (of Equity)` | `double` | `0.02` | Risk allocation per trade (e.g. `0.02` = 2% of equity) |
 | **Risk Budgeting** | `TP Multiplier (ATR)` | `double` | `2.0` | ATR multiplier for Take Profit targets |
 | **Risk Budgeting** | `SL Multiplier (ATR)` | `double` | `3.0` | ATR multiplier for Stop Loss targets |
@@ -124,7 +124,7 @@ Parameters are structured into clean groups within the cTrader Automate panel:
 
 ```
 ├── src/
-│   └── GoldenAlgo.cs                  # Main quantitative execution engine
+│   └── gAlgo.cs                  # Main quantitative execution engine
 ├── data/
 │   └── calendar-event-list.sample.csv # Sample macroeconomic calendar format
 ├── .gitignore                         # Comprehensive C# & cTrader ignore rules
@@ -144,8 +144,8 @@ Parameters are structured into clean groups within the cTrader Automate panel:
 ### Running in cTrader
 1. Launch **cTrader**.
 2. Open the **Automate** tab.
-3. Click **New cBot** and name it `GoldenAlgo`.
-4. Replace the template with the contents of [`src/GoldenAlgo.cs`](src/GoldenAlgo.cs).
+3. Click **New cBot** and name it `gAlgo`.
+4. Replace the template with the contents of [`src/gAlgo.cs`](src/gAlgo.cs).
 5. Press `Ctrl + B` to build the cBot.
 
 ### Economic Calendar Setup (Optional)
